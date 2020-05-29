@@ -1,6 +1,6 @@
 //
 //  SceneDelegate.swift
-//  WeSplit
+//  TipSplitter
 //
 //  Created by Dylan Perry on 5/29/20.
 //  Copyright © 2020 dperry.io. All rights reserved.
@@ -20,7 +20,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
 
         // Create the SwiftUI view that provides the window contents.
-        let contentView = ContentView()
+        let contentView = TipSplitterView()
 
         // Use a UIHostingController as window root view controller.
         if let windowScene = scene as? UIWindowScene {
