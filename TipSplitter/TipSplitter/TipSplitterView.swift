@@ -10,7 +10,7 @@ import SwiftUI
 
 struct TipSplitterView {
     @State private var checkAmount = ""
-    @State private var numberOfPeople = 2
+    @State private var numberOfPeople = ""
     @State private var tipPercentage = 2
     
     let tipPercentages = [10, 15, 20, 25, 0]
@@ -24,7 +24,7 @@ struct TipSplitterView {
 
     }
     var totalPerPerson: Double {
-        let peopleCount = Double(numberOfPeople + 2)
+        let peopleCount = Double(numberOfPeople) ?? 1
         let tipSelection = Double(tipPercentages[tipPercentage])
         let orderAmount = Double(checkAmount) ?? 0
 
@@ -41,16 +41,18 @@ extension TipSplitterView: View {
         NavigationView {
             Form {
                 Section {
-                    TextField("Amount", text: $checkAmount)
-                        .keyboardType(.decimalPad)
+                    TextField("Amount", text: $checkAmount) {
+                        UIApplication.shared.endEditing()
+                    }
+                        .keyboardType(.numbersAndPunctuation)
+
                 }
                 
                 Section(header: Text("Number Of People At Meal")) {
-                    Picker("Number of people", selection: $numberOfPeople) {
-                        ForEach(2 ..< 100) {
-                            Text("\($0) people")
-                        }
+                    TextField("Number of People: ", text: $numberOfPeople){
+                        UIApplication.shared.endEditing()
                     }
+                    .keyboardType(.numbersAndPunctuation)
                 }
                 
                 Section(header: Text("Tip Percentage")){
@@ -74,6 +76,12 @@ extension TipSplitterView: View {
             }
             .navigationBarTitle("TipSplitter")
         }
+    }
+}
+
+extension UIApplication {
+    func endEditing() {
+        sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
 }
 
