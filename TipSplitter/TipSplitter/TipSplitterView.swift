@@ -44,8 +44,8 @@ extension TipSplitterView: View {
                     TextField("Amount", text: $checkAmount) {
                         UIApplication.shared.endEditing()
                     }
+                    .foregroundColor(checkAmount == "0" ? .red: .black)
                         .keyboardType(.numbersAndPunctuation)
-
                 }
                 
                 Section(header: Text("Number Of People At Meal")) {
