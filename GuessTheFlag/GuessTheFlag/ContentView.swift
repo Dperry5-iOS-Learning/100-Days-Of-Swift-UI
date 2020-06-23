@@ -18,6 +18,11 @@ struct ContentView {
     @State private var scoreTitle = ""
     
     @State private var score = 0
+    
+    @State private var animationAmount = 0.0
+    
+    @State private var opacityAmount = 0.0
+
 }
 
 extension ContentView {
@@ -33,6 +38,8 @@ extension ContentView {
     }
     
     func askQuestion() {
+        self.animationAmount = 0.0
+        self.opacityAmount = 0.0
         countries.shuffle()
         correctAnswer = Int.random(in: 0...2)
     }
@@ -60,13 +67,23 @@ extension ContentView: View {
                 }
                 
                 ForEach(0 ..< 3) { number in
-                    Button(action: {
-                       // flag was tapped
-                        self.flagTapped(number)
-
-                    }) {
-                        FlagView(country: self.countries[number])
-                    }
+                        Button(action: {
+                            // flag was tapped
+                            self.flagTapped(number)
+                            if self.correctAnswer == number {
+                                withAnimation(.interpolatingSpring(stiffness: 5, damping: 1)) {
+                                    self.animationAmount += 360
+                                }
+                            } else {
+                                withAnimation {
+                                    self.opacityAmount += 1.75
+                                }
+                            }
+                        }) {
+                            FlagView(country: self.countries[number])
+                        }
+                        .rotation3DEffect(.degrees(self.animationAmount), axis: (x: 0, y: 1, z: 0))
+                        .opacity(Double(2 - self.opacityAmount))
                 }
                 Spacer()
                 Text("Current Score: \(score)")
