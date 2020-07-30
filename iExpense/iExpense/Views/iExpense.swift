@@ -14,12 +14,20 @@ struct iExpense {
     
     @State
     private var showingAddExpense = false
-
 }
 
 extension iExpense {
     func removeItems(at offsets: IndexSet){
         expenses.items.remove(atOffsets: offsets)
+    }
+    
+    func getColor(currentValue: Int) -> Color {
+        if (currentValue < 10) {
+            return .gray
+        } else if (currentValue < 100) {
+            return .orange
+        }
+        return .red
     }
 }
 
@@ -37,12 +45,15 @@ extension iExpense: View {
 
                         Spacer()
                         Text("$\(item.amount)")
+                            .foregroundColor(self.getColor(currentValue: item.amount))
                     }
+
+                    
                 }
                 .onDelete(perform: removeItems)
 
             }
-            .navigationBarItems(trailing:
+            .navigationBarItems(leading: EditButton(), trailing:
                 Button(action: {
                     self.showingAddExpense = true
                 }) {

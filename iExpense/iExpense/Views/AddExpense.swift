@@ -18,14 +18,15 @@ struct AddExpense {
     @State
     private var amount = ""
     
+    @State
+    private var showAlert = false
+    
     @ObservedObject
     var expenses: Expenses
     
     @Environment(\.presentationMode)
     var presentationMode
 
-
-    
     static let types = ["Business", "Personal"]
 }
 
@@ -47,11 +48,18 @@ extension AddExpense: View {
                     let item = ExpenseItem(name: self.name, type: self.type, amount: actualAmount)
                     self.expenses.items.append(item)
                     self.presentationMode.wrappedValue.dismiss()
-
+                } else {
+                    self.showAlert.toggle()
                 }
                 
             })
             .navigationBarTitle("Add new expense")
+        }
+        .alert(isPresented: $showAlert) {
+            Alert(title: Text("Invalid Amount"), message: Text("The integer value you entered could not be converted. Please enter a valid amount."), dismissButton: .cancel(Text("Try Again"), action: {
+                self.amount = ""
+                self.showAlert.toggle()
+            }))
         }
     }
 }
